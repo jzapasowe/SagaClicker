@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="style.css">
+<title>Saga Clicker</title>
+</head>
+<body>
+    <div class="score">
+        <div id="currency"></div>
+        <div>Zdrowie Blaszki: <span id="health"></span></div>
+        <div>Pokonane Blaszki: <span id="defeatCount"></span></div>
+    </div>
+    <div class="clicker-menu">
+        <button type=button onclick="blaszkaClick()">
+            <img src="blaszka.png">
+        </button>
+    </div>
+    <div class="upgrade-menu">
+        <button class="upgrade" onclick="upgradeClick(0)">
+            <div id="label1">
+                Galiusz
+            </div>
+            <img id="img1">
+            <div>
+                <div>
+                    Zwiększ DMG o 1
+                </div>
+                <div>Posiadane: <span id="owned1"></span></div>
+                <div>Koszt: <span id="cost1"></span></div>
+            </div>
+        </button>
+        <button class="upgrade" onclick="upgradeClick(1)">
+            <div id="label2">
+                Galiusz
+            </div>
+            <img id="img2">
+            <div>
+                <div>
+                    Zwiększ DMG o 5
+                </div>
+                <div>Posiadane: <span id="owned2"></span></div>
+                <div>Koszt: <span id="cost2"></span></div>
+            </div>
+        </button>
+        <button class="upgrade" onclick="upgradeClick(2)">
+            <div id="label3">
+                Galiusz
+            </div>
+            <img id="img3">
+            <div>
+                <div>
+                    Zwiększ DMG o 10
+                </div>
+                <div>Posiadane: <span id="owned3"></span></div>
+                <div>Koszt: <span id="cost3"></span></div>
+            </div>
+        </button>
+        <button class="upgrade" onclick="upgradeClick(3)">
+            <div id="label4">
+                Galiusz
+            </div>
+            <img id="img4">
+            <div>
+                <div>
+                    Zwiększ DMG o 25
+                </div>
+                <div>Posiadane: <span id="owned4"></span></div>
+                <div>Koszt: <span id="cost4"></span></div>
+            </div>
+        </button>
+        <button class="upgrade" onclick="upgradeClick(4)">
+            <div id="label5">
+                Galiusz
+            </div>
+            <img id="img5">
+            <div>
+                <div>
+                    Zwiększ DMG o 100
+                </div>
+                <div>Posiadane: <span id="owned5"></span></div>
+                <div>Koszt: <span id="cost5"></span></div>
+            </div>
+        </button>
+    </div>
+<script>
+    var score = 0;
+    var maxHealth = 10000;
+    var currentHealth = maxHealth;
+    var clickValue = 1;
+    var defeatCount = 0;
+
+    var pointsLabel;
+    var teamFolder;
+    var upgrades = [];
+
+
+    const currency = document.getElementById("currency")
+    const healthSpan = document.getElementById("health");
+    const defeatSpan = document.getElementById("defeatCount")
+
+    class Upgrade {
+        constructor(cost, dmgBoost, ownedLabel, costLabel) {
+            this.owned = 0;
+            this.cost = cost;
+            this.dmgBoost = dmgBoost;
+            this.ownedLabel = ownedLabel;
+            this.costLabel = costLabel;
+
+            this.ownedLabel.innerText = this.owned;
+            this.costLabel.innerText = this.cost;
+        }
+
+        buyUpgrade() {
+            if (this.cost > score) {
+                return;
+            }
+
+            score -= this.cost;
+            this.owned++;
+            clickValue += this.dmgBoost;
+            this.cost *= 2.5;
+
+            this.ownedLabel.innerText = this.owned;
+            this.costLabel.innerText = this.cost;
+            currency.innerText = pointsLabel + score;
+        }
+    }
+
+    onInit();
+
+    function onInit() {
+        pointsLabel = "Saga Coins: ";
+        teamFolder = "sagaTeam/";
+
+        currency.innerText = pointsLabel + score;
+        healthSpan.innerText = currentHealth + "/" + maxHealth;
+        defeatSpan.innerText = defeatCount;
+
+
+        document.getElementById("label1").innerText = getLabel(0, 0)
+        document.getElementById("label2").innerText = getLabel(0, 1)
+        document.getElementById("label3").innerText = getLabel(0, 2)
+        document.getElementById("label4").innerText = getLabel(0, 3)
+        document.getElementById("label5").innerText = getLabel(0, 4)
+        document.getElementById("img1").setAttribute("src", teamFolder+"upgrade1.png");
+        document.getElementById("img2").setAttribute("src", teamFolder+"upgrade2.png");
+        document.getElementById("img3").setAttribute("src", teamFolder+"upgrade3.png");
+        document.getElementById("img4").setAttribute("src", teamFolder+"upgrade4.png");
+        document.getElementById("img5").setAttribute("src", teamFolder+"upgrade5.png");
+
+        upgrades.push(new Upgrade(10, 1, document.getElementById("owned1"), document.getElementById("cost1")));
+        upgrades.push(new Upgrade(150, 5, document.getElementById("owned2"), document.getElementById("cost2")));
+        upgrades.push(new Upgrade(500, 10, document.getElementById("owned3"), document.getElementById("cost3")));
+        upgrades.push(new Upgrade(1000, 25, document.getElementById("owned4"), document.getElementById("cost4")));
+        upgrades.push(new Upgrade(1500, 100, document.getElementById("owned5"), document.getElementById("cost5")));
+
+    }
+
+    function blaszkaClick() {
+        score += clickValue;
+        currentHealth -= clickValue;
+
+        if (currentHealth <= 0) {
+            defeatSpan.innerText = ++defeatCount;
+            maxHealth *= 10;
+            currentHealth = maxHealth;
+        }
+
+        currency.innerText = pointsLabel + score;
+        healthSpan.innerText = currentHealth + "/" + maxHealth;
+    }
+
+    function upgradeClick(index) {
+        upgrades[index].buyUpgrade();
+    }
+
+    function getLabel(team, index) {
+        switch (team) {
+            case 0:
+                switch (index) {
+                    case 0:
+                        return "Galiusz";
+                    case 1:
+                        return "Garound";
+                    case 2:
+                        return "Szczawik";
+                    case 3:
+                        return "Koza";
+                    case 4:
+                        return "Magiczny Chomik";
+                }
+        }
+    }
+
+</script>
+</body>
+</html>
