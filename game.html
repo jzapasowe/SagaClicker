@@ -100,12 +100,13 @@
     const defeatSpan = document.getElementById("defeatCount")
 
     class Upgrade {
-        constructor(cost, dmgBoost, ownedLabel, costLabel) {
+        constructor(cost, dmgBoost, costRise, ownedLabel, costLabel) {
             this.owned = 0;
             this.cost = cost;
             this.dmgBoost = dmgBoost;
             this.ownedLabel = ownedLabel;
             this.costLabel = costLabel;
+            this.costRise = costRise;
 
             this.ownedLabel.innerText = this.owned;
             this.costLabel.innerText = this.cost;
@@ -119,7 +120,7 @@
             score -= this.cost;
             this.owned++;
             clickValue += this.dmgBoost;
-            this.cost *= 2.5;
+            this.cost = parseFloat((this.cost * this.costRise).toFixed(2));
 
             this.ownedLabel.innerText = this.owned;
             this.costLabel.innerText = this.cost;
@@ -149,11 +150,11 @@
         document.getElementById("img4").setAttribute("src", teamFolder+"upgrade4.png");
         document.getElementById("img5").setAttribute("src", teamFolder+"upgrade5.png");
 
-        upgrades.push(new Upgrade(10, 1, document.getElementById("owned1"), document.getElementById("cost1")));
-        upgrades.push(new Upgrade(150, 5, document.getElementById("owned2"), document.getElementById("cost2")));
-        upgrades.push(new Upgrade(500, 10, document.getElementById("owned3"), document.getElementById("cost3")));
-        upgrades.push(new Upgrade(1000, 25, document.getElementById("owned4"), document.getElementById("cost4")));
-        upgrades.push(new Upgrade(1500, 100, document.getElementById("owned5"), document.getElementById("cost5")));
+        upgrades.push(new Upgrade(10, 1, 1.1, document.getElementById("owned1"), document.getElementById("cost1")));
+        upgrades.push(new Upgrade(150, 5, 1.5, document.getElementById("owned2"), document.getElementById("cost2")));
+        upgrades.push(new Upgrade(500, 10, 2.0, document.getElementById("owned3"), document.getElementById("cost3")));
+        upgrades.push(new Upgrade(1000, 25, 3.0, document.getElementById("owned4"), document.getElementById("cost4")));
+        upgrades.push(new Upgrade(1500, 100, 4.5, document.getElementById("owned5"), document.getElementById("cost5")));
 
     }
 
